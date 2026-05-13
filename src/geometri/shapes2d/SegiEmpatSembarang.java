@@ -3,10 +3,14 @@ package geometri.shapes2d;
 import geometri.interfaces.Geometri;
 
 /**
- * Segi empat bidang dengan sisi a–b–c–d berurutan dan sudut dalam di setiap vertex.
- * Luas alas dihitung dengan satu diagonal dari sudut antara sisi a dan b (sudutB).
+ * Segi empat sembarang di bidang: empat sisi {@code a–b–c–d} berurutan dan empat sudut dalam
+ * {@code sudutA…sudutD} (derajat) di setiap vertex.
+ * <p>
+ * <b>Kalau ditanya “segi empat sembarangnya di mana?”</b> — class ini <em>adalah</em> bentuknya:
+ * field sisi + sudut, plus {@link #hitungLuas()} / {@link #hitungKeliling()}.
+ * Luas memakai diagonal (cosine rule dari sudut antara {@code a} dan {@code b}) + Heron dua segitiga.
  */
-public class SegiEmpat2D implements Geometri {
+public class SegiEmpatSembarang implements Geometri {
 
     private final double a;
     private final double b;
@@ -17,7 +21,7 @@ public class SegiEmpat2D implements Geometri {
     private final double sudutC;
     private final double sudutD;
 
-    public SegiEmpat2D(double a, double b, double c, double d,
+    public SegiEmpatSembarang(double a, double b, double c, double d,
             double sudutA, double sudutB, double sudutC, double sudutD) {
         this.a = a;
         this.b = b;
@@ -34,10 +38,6 @@ public class SegiEmpat2D implements Geometri {
         return a + b + c + d;
     }
 
-    /**
-     * Dekomposisi diagonal: diagonal antara ujung sisi a dan b memakai cosine rule,
-     * lalu luas = Heron(a,b,d) + Heron(c,d,d).
-     */
     @Override
     public double hitungLuas() {
         double radB = Math.toRadians(sudutB);
@@ -73,7 +73,7 @@ public class SegiEmpat2D implements Geometri {
     @Override
     public String getInfo() {
         return String.format(
-                "Segi Empat 2D | Sisi: a=%.2f, b=%.2f, c=%.2f, d=%.2f | Sudut A-D (deg): %.1f, %.1f, %.1f, %.1f",
+                "Segi empat sembarang (2D) | sisi a=%.2f,b=%.2f,c=%.2f,d=%.2f | sudut ° A–D: %.1f, %.1f, %.1f, %.1f",
                 a, b, c, d, sudutA, sudutB, sudutC, sudutD);
     }
 }

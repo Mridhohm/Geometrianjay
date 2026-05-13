@@ -1,12 +1,16 @@
 package geometri.shapes3d;
 
 import geometri.interfaces.Geometri;
-import geometri.shapes2d.SegiEmpat2D;
+import geometri.shapes2d.SegiEmpatSembarang;
 
 /**
- * Prisma tegak beralas segi empat.
+ * Prisma tegak dengan alas berbentuk segi empat sembarang.
+ * <p>
+ * <b>Kalau ditanya “segi empat sembarangnya di mana?”</b> — sama seperti limas: field
+ * {@code a,b,c,d} dan {@code sudutA–D} mendeskripsikan alas; {@link #hitungLuasAlas()}
+ * mendelegasikan ke {@link SegiEmpatSembarang}.
  */
-public class Prisma3D implements Geometri {
+public class PrismaSegiEmpatSembarang implements Geometri {
 
     private final double a;
     private final double b;
@@ -18,7 +22,7 @@ public class Prisma3D implements Geometri {
     private final double sudutD;
     private final double tinggiPrisma;
 
-    public Prisma3D(double a, double b, double c, double d,
+    public PrismaSegiEmpatSembarang(double a, double b, double c, double d,
             double sudutA, double sudutB, double sudutC, double sudutD,
             double tinggiPrisma) {
         this.a = a;
@@ -33,7 +37,7 @@ public class Prisma3D implements Geometri {
     }
 
     private double hitungLuasAlas() {
-        SegiEmpat2D alas = new SegiEmpat2D(a, b, c, d, sudutA, sudutB, sudutC, sudutD);
+        SegiEmpatSembarang alas = new SegiEmpatSembarang(a, b, c, d, sudutA, sudutB, sudutC, sudutD);
         return alas.hitungLuas();
     }
 
@@ -60,7 +64,7 @@ public class Prisma3D implements Geometri {
     @Override
     public String getInfo() {
         return String.format(
-                "Prisma 3D | Alas a=%.2f,b=%.2f,c=%.2f,d=%.2f | tinggi prisma=%.2f",
-                a, b, c, d, tinggiPrisma);
+                "Prisma alas segi empat sembarang | alas a=%.2f,b=%.2f,c=%.2f,d=%.2f (°) %.1f,%.1f,%.1f,%.1f | tinggi prisma=%.2f",
+                a, b, c, d, sudutA, sudutB, sudutC, sudutD, tinggiPrisma);
     }
 }

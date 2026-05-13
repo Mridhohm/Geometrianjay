@@ -1,12 +1,16 @@
 package geometri.shapes3d;
 
 import geometri.interfaces.Geometri;
-import geometri.shapes2d.SegiEmpat2D;
+import geometri.shapes2d.SegiEmpatSembarang;
 
 /**
- * Limas beralas segi empat (sisi dan sudut alas sama seperti SegiEmpat2D).
+ * Limas dengan alas berbentuk segi empat sembarang.
+ * <p>
+ * <b>Kalau ditanya “segi empat sembarangnya di mana?”</b> — parameter {@code a,b,c,d} dan
+ * {@code sudutA–D} <em>adalah</em> alas segi empat sembarang; luas alas dihitung lewat
+ * {@link #hitungLuasAlas()} yang membuat {@link SegiEmpatSembarang} dengan data yang sama.
  */
-public class Limas3D implements Geometri {
+public class LimasSegiEmpatSembarang implements Geometri {
 
     private final double a;
     private final double b;
@@ -22,7 +26,7 @@ public class Limas3D implements Geometri {
     private final double tinggiSisiC;
     private final double tinggiSisiD;
 
-    public Limas3D(double a, double b, double c, double d,
+    public LimasSegiEmpatSembarang(double a, double b, double c, double d,
             double sudutA, double sudutB, double sudutC, double sudutD,
             double tinggiLimas,
             double tinggiSisiA, double tinggiSisiB, double tinggiSisiC, double tinggiSisiD) {
@@ -41,8 +45,9 @@ public class Limas3D implements Geometri {
         this.tinggiSisiD = tinggiSisiD;
     }
 
+    /** Luas alas = luas segi empat sembarang dengan sisi & sudut yang sama. */
     private double hitungLuasAlas() {
-        SegiEmpat2D alas = new SegiEmpat2D(a, b, c, d, sudutA, sudutB, sudutC, sudutD);
+        SegiEmpatSembarang alas = new SegiEmpatSembarang(a, b, c, d, sudutA, sudutB, sudutC, sudutD);
         return alas.hitungLuas();
     }
 
@@ -71,7 +76,8 @@ public class Limas3D implements Geometri {
     @Override
     public String getInfo() {
         return String.format(
-                "Limas 3D | Alas a=%.2f,b=%.2f,c=%.2f,d=%.2f | tinggi=%.2f | tinggi sisi a-d: %.2f,%.2f,%.2f,%.2f",
-                a, b, c, d, tinggiLimas, tinggiSisiA, tinggiSisiB, tinggiSisiC, tinggiSisiD);
+                "Limas alas segi empat sembarang | alas a=%.2f,b=%.2f,c=%.2f,d=%.2f (°) %.1f,%.1f,%.1f,%.1f | tinggi limas=%.2f | tinggi sisi tegak a–d=%.2f,%.2f,%.2f,%.2f",
+                a, b, c, d, sudutA, sudutB, sudutC, sudutD, tinggiLimas,
+                tinggiSisiA, tinggiSisiB, tinggiSisiC, tinggiSisiD);
     }
 }

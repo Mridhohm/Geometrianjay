@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 import geometri.interfaces.Geometri;
-import geometri.shapes2d.SegiEmpat2D;
-import geometri.shapes3d.Limas3D;
-import geometri.shapes3d.Prisma3D;
+import geometri.shapes2d.SegiEmpatSembarang;
+import geometri.shapes3d.LimasSegiEmpatSembarang;
+import geometri.shapes3d.PrismaSegiEmpatSembarang;
 
 /**
  * Membangkitkan bentuk geometri acak untuk demo multithreading.
@@ -32,38 +32,38 @@ public final class ShapeGenerator {
         for (int i = 0; i < count; i++) {
             int kind = RND.nextInt(3);
             if (kind == 0) {
-                shapes.add(randomSegiEmpat2D());
+                shapes.add(randomSegiEmpatSembarang());
             } else if (kind == 1) {
-                shapes.add(randomLimas3D());
+                shapes.add(randomLimasSegiEmpatSembarang());
             } else {
-                shapes.add(randomPrisma3D());
+                shapes.add(randomPrismaSegiEmpatSembarang());
             }
         }
         return shapes;
     }
 
-    private static SegiEmpat2D randomSegiEmpat2D() {
+    private static SegiEmpatSembarang randomSegiEmpatSembarang() {
         if (RND.nextBoolean()) {
             double s = 3 + RND.nextDouble() * 5;
-            return new SegiEmpat2D(s, s, s, s, 90, 90, 90, 90);
+            return new SegiEmpatSembarang(s, s, s, s, 90, 90, 90, 90);
         }
         double w = 3 + RND.nextDouble() * 6;
         double h = 2 + RND.nextDouble() * 5;
-        return new SegiEmpat2D(w, h, w, h, 90, 90, 90, 90);
+        return new SegiEmpatSembarang(w, h, w, h, 90, 90, 90, 90);
     }
 
-    private static Limas3D randomLimas3D() {
+    private static LimasSegiEmpatSembarang randomLimasSegiEmpatSembarang() {
         double w = 3 + RND.nextDouble() * 4;
         double h = 2 + RND.nextDouble() * 4;
         double tinggi = 4 + RND.nextDouble() * 6;
         double hs = 3 + RND.nextDouble() * 4;
-        return new Limas3D(w, h, w, h, 90, 90, 90, 90, tinggi, hs, hs, hs, hs);
+        return new LimasSegiEmpatSembarang(w, h, w, h, 90, 90, 90, 90, tinggi, hs, hs, hs, hs);
     }
 
-    private static Prisma3D randomPrisma3D() {
+    private static PrismaSegiEmpatSembarang randomPrismaSegiEmpatSembarang() {
         double w = 3 + RND.nextDouble() * 5;
         double h = 2 + RND.nextDouble() * 5;
         double t = 5 + RND.nextDouble() * 10;
-        return new Prisma3D(w, h, w, h, 90, 90, 90, 90, t);
+        return new PrismaSegiEmpatSembarang(w, h, w, h, 90, 90, 90, 90, t);
     }
 }

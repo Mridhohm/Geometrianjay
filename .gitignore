@@ -1,0 +1,20 @@
+# Build / compile
+bin/
+target/
+out/
+*.class
+
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+nbproject/private/
+build/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Local archives (optional share zips)
+*.zip

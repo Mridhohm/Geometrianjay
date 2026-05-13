@@ -55,15 +55,17 @@ public final class ShapeGenerator {
     private static LimasSegiEmpatSembarang randomLimasSegiEmpatSembarang() {
         double w = 3 + RND.nextDouble() * 4;
         double h = 2 + RND.nextDouble() * 4;
+        SegiEmpatSembarang alas = new SegiEmpatSembarang(w, h, w, h, 90, 90, 90, 90);
         double tinggi = 4 + RND.nextDouble() * 6;
         double hs = 3 + RND.nextDouble() * 4;
-        return new LimasSegiEmpatSembarang(w, h, w, h, 90, 90, 90, 90, tinggi, hs, hs, hs, hs);
+        return new LimasSegiEmpatSembarang(alas, tinggi, hs, hs, hs, hs);
     }
 
     private static PrismaSegiEmpatSembarang randomPrismaSegiEmpatSembarang() {
         double w = 3 + RND.nextDouble() * 5;
         double h = 2 + RND.nextDouble() * 5;
+        SegiEmpatSembarang alas = new SegiEmpatSembarang(w, h, w, h, 90, 90, 90, 90);
         double t = 5 + RND.nextDouble() * 10;
-        return new PrismaSegiEmpatSembarang(w, h, w, h, 90, 90, 90, 90, t);
+        return new PrismaSegiEmpatSembarang(alas, t);
     }
 }

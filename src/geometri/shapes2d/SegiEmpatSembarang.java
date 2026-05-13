@@ -33,6 +33,23 @@ public class SegiEmpatSembarang implements Geometri {
         this.sudutD = sudutD;
     }
 
+    /** Panjang sisi berurutan (untuk komposisi limas/prisma, misalnya luas sisi miring). */
+    public double getSisiA() {
+        return a;
+    }
+
+    public double getSisiB() {
+        return b;
+    }
+
+    public double getSisiC() {
+        return c;
+    }
+
+    public double getSisiD() {
+        return d;
+    }
+
     @Override
     public double hitungKeliling() {
         return a + b + c + d;

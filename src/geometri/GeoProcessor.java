@@ -1,8 +1,6 @@
-package geometri.processors;
+package geometri;
 
 import java.util.function.Consumer;
-
-import geometri.interfaces.Geometri;
 
 public class GeoProcessor implements Runnable {
 

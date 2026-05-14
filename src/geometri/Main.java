@@ -1,9 +1,7 @@
+package geometri;
+
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
-
-import geometri.ShapeGenerator;
-import geometri.interfaces.Geometri;
-import geometri.processors.GeoProcessor;
 
 public class Main {
 

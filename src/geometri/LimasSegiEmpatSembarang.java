@@ -1,14 +1,11 @@
-package geometri.shapes3d;
+package geometri;
 
 import java.util.Objects;
-
-import geometri.interfaces.Geometri;
-import geometri.shapes2d.SegiEmpatSembarang;
 
 /**
  * Limas dengan alas berbentuk segi empat sembarang (komposisi: memegang {@link SegiEmpatSembarang}).
  * <p>
- * <b>“Seji empat sembarangnya di mana?”</b> — field {@link #alas}; volume & luas alas memakai objek itu.
+ * <b>Kalau ditanya “segi empat sembarangnya di mana?”</b> — field {@link #alas}; volume & luas alas memakai objek itu.
  */
 public class LimasSegiEmpatSembarang implements Geometri {
 

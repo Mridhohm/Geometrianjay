@@ -1,4 +1,4 @@
-package geometri.interfaces;
+package geometri;
 
 /**
  * Kontrak perhitungan geometri untuk bentuk 2D dan 3D.

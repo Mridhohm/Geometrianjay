@@ -4,11 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-import geometri.interfaces.Geometri;
-import geometri.shapes2d.SegiEmpatSembarang;
-import geometri.shapes3d.LimasSegiEmpatSembarang;
-import geometri.shapes3d.PrismaSegiEmpatSembarang;
-
 /**
  * Membangkitkan bentuk geometri acak untuk demo multithreading.
  */

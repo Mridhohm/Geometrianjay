@@ -1,9 +1,6 @@
-package geometri.shapes3d;
+package geometri;
 
 import java.util.Objects;
-
-import geometri.interfaces.Geometri;
-import geometri.shapes2d.SegiEmpatSembarang;
 
 /**
  * Prisma tegak dengan alas segi empat sembarang (komposisi: {@link SegiEmpatSembarang}).

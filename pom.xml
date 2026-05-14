@@ -17,7 +17,7 @@
     </properties>
 
     <build>
-        <!-- Struktur flat: src/geometri/... dan src/Main.java -->
+        <!-- Semua sumber di src/; kelas utama di package geometri -->
         <sourceDirectory>src</sourceDirectory>
         <plugins>
             <plugin>
@@ -32,7 +32,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>GeometriFrame</mainClass>
+                            <mainClass>geometri.GeometriFrame</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -42,7 +42,7 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>3.1.0</version>
                 <configuration>
-                    <mainClass>GeometriFrame</mainClass>
+                    <mainClass>geometri.GeometriFrame</mainClass>
                 </configuration>
             </plugin>
         </plugins>

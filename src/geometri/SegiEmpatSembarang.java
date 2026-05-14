@@ -1,6 +1,4 @@
-package geometri.shapes2d;
-
-import geometri.interfaces.Geometri;
+package geometri;
 
 /**
  * Segi empat sembarang di bidang: empat sisi {@code a–b–c–d} berurutan dan empat sudut dalam

@@ -10,16 +10,9 @@ public class GeoProcessor implements Runnable {
     private final int delayMs;
     private final Consumer<String> logSink;
 
-    /**
-     * Mode konsol: keluaran ke {@link System#out}.
-     */
     public GeoProcessor(Geometri shape, String threadID, int delayMs) {
         this(shape, threadID, delayMs, null);
     }
-
-    /**
-     * @param logSink jika tidak null, setiap baris log dikirim ke consumer (misalnya untuk GUI).
-     */
     public GeoProcessor(Geometri shape, String threadID, int delayMs, Consumer<String> logSink) {
         this.shape = shape;
         this.threadID = threadID;

@@ -7,9 +7,6 @@ public class Main {
 
     private static final ThreadLocalRandom RND = ThreadLocalRandom.current();
 
-    /**
-     * Satu bentuk geometri = satu thread. Ubah dua angka ini untuk memperbanyak / mengurangi.
-     */
     private static final int JUMLAH_BENTUK_MIN = 3;
     private static final int JUMLAH_BENTUK_MAX = 5; // inklusif
 

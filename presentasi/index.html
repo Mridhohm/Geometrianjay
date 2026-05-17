@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bahan belajar &amp; laporan — Proyek Geometri multithreading (Java)</title>
+  <style>
+    :root {
+      --bg: #f4f6fa;
+      --card: #fff;
+      --text: #151922;
+      --muted: #5a6270;
+      --accent: #1d4ed8;
+      --accent-soft: #e8efff;
+      --border: #dde2eb;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      font-size: 1rem;
+    }
+    header {
+      background: linear-gradient(135deg, #0f2744, #1d4ed8);
+      color: #fff;
+      padding: 1.75rem 1.25rem;
+    }
+    header h1 { margin: 0 0 0.4rem; font-size: 1.35rem; font-weight: 700; }
+    header p { margin: 0; opacity: 0.93; font-size: 0.95rem; max-width: 40rem; }
+    .wrap { max-width: 56rem; margin: 0 auto; padding: 1rem 1.25rem 3.5rem; }
+    nav.toc {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem 1.25rem 1.1rem;
+      margin: 1rem 0 1.5rem;
+    }
+    nav.toc h2 { margin: 0 0 0.5rem; font-size: 1rem; }
+    nav.toc ol { margin: 0; padding-left: 1.35rem; }
+    nav.toc a { color: var(--accent); text-decoration: none; }
+    nav.toc a:hover { text-decoration: underline; }
+    section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.35rem 1.45rem;
+      margin-bottom: 1.25rem;
+    }
+    section h2 {
+      margin-top: 0;
+      font-size: 1.22rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.45rem;
+    }
+    section h3 { font-size: 1.08rem; margin: 1.35rem 0 0.55rem; color: #111827; }
+    section h4 { font-size: 0.98rem; margin: 1rem 0 0.4rem; color: #374151; }
+    p { margin: 0.65rem 0; }
+    ul, ol { margin: 0.45rem 0; padding-left: 1.35rem; }
+    li { margin: 0.25rem 0; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.88rem; margin: 0.75rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.55rem; text-align: left; vertical-align: top; }
+    th { background: #eef2f9; }
+    .note { font-size: 0.9rem; color: var(--muted); }
+    .callout {
+      margin: 0.85rem 0;
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      border-left: 4px solid var(--accent);
+      background: var(--accent-soft);
+      font-size: 0.92rem;
+    }
+    .callout strong { color: #1e3a8a; }
+    .files { background: #f0f4fa; padding: 0.75rem 1rem; border-radius: 8px; font-size: 0.9rem; margin: 0.75rem 0; }
+    .files code { font-size: 0.85em; }
+    .mermaid-wrap { overflow-x: auto; margin: 1rem 0; padding: 0.75rem; background: #fafbfc; border-radius: 8px; border: 1px dashed var(--border); }
+    pre.mermaid { margin: 0; background: transparent; font-family: ui-monospace, Consolas, monospace; font-size: 0.78rem; white-space: pre-wrap; }
+    code { font-family: ui-monospace, Consolas, monospace; font-size: 0.88em; background: #f1f5f9; padding: 0.12em 0.35em; border-radius: 4px; }
+    dl.line { margin: 0.5rem 0; }
+    dl.line dt { font-weight: 600; margin-top: 0.5rem; }
+    dl.line dd { margin: 0.2rem 0 0 0; color: #374151; }
+    footer { text-align: center; color: var(--muted); font-size: 0.85rem; margin-top: 2rem; }
+    a { color: var(--accent); }
+    details.narasi {
+      margin: 0.65rem 0;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.35rem 0.65rem 0.65rem;
+      background: #fafbfc;
+    }
+    details.narasi summary {
+      cursor: pointer;
+      font-weight: 600;
+      color: #1e3a8a;
+      padding: 0.35rem 0;
+    }
+    details.narasi .narasi-body { margin-top: 0.5rem; font-size: 0.92rem; }
+    details.narasi ol.talk { margin: 0.35rem 0 0 1.1rem; padding-left: 1rem; }
+    details.narasi ol.talk li { margin: 0.35rem 0; }
+    .step-ref { font-size: 0.82rem; color: var(--muted); margin-top: 0.25rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <h1>Bahan belajar &amp; kerangka laporan — Proyek Geometri multithreading</h1>
+      <p>Java, package <code>geometri</code>, OOP, matematika dasar yang dipakai, alur konsol/GUI, dan multithreading. Dokumen ini dirancang agar bisa dipakai untuk belajar mandiri dan menyusun laporan project.</p>
+    </div>
+  </header>
+  <div class="wrap">
+    <p class="note"><strong>Cara pakai:</strong> baca urut dari atas (OOP dasar → tiap class → alur → pilar → matematika). Untuk <strong>presentasi</strong>, bagian §8: flowchart <strong>01 → 05</strong> berurutan untuk menjelaskan, lalu <strong>diagram 06</strong> sebagai ringkasan penuh di akhir. Diagram di browser butuh internet (CDN Mermaid). File <code>.mmd</code> di <code>presentasi/mermaid/</code>. Markdown: <code>PRESENTASI_LENGKAP.md</code>.</p>
+
+    <nav class="toc" aria-label="Daftar isi">
+      <h2>Daftar isi</h2>
+      <ol>
+        <li><a href="#s1">Ringkasan project &amp; ide besar</a></li>
+        <li><a href="#s2">Konsep OOP dasar (sebelum pilar)</a></li>
+        <li><a href="#s3">Penjelasan tiap class &amp; file</a></li>
+        <li><a href="#s4">Alur program (konsol &amp; GUI) — langkah demi langkah</a></li>
+        <li><a href="#s5">Lima pilar OOP — penjelasan mendalam + bukti di kode</a></li>
+        <li><a href="#s6">Matematika dari nol (yang dipakai program)</a></li>
+        <li><a href="#s7">Materi kuliah → bagian project</a></li>
+        <li><a href="#s8">Flowchart 01–06 + simbol standar</a> · <a href="PENJELASAN_FLOWCHART_LENGKAP.md">panduan baca</a></li>
+        <li><a href="#s9">Cheat sheet Q&amp;A</a></li>
+      </ol>
+    </nav>
+
+    <section id="s1">
+      <h2>1. Ringkasan project &amp; ide besar</h2>
+      <p>Program ini menghitung besaran geometri untuk tiga jenis “bentuk”:</p>
+      <ul>
+        <li><strong>Segi empat sembarang (2D)</strong> — hanya di bidang datar: luas, keliling. Volume = 0; luas permukaan = luas bidang.</li>
+        <li><strong>Limas</strong> — alas berbentuk segi empat sembarang + tinggi limas + tinggi sisi tegak tiap rusuk alas (untuk luas sisi miring).</li>
+        <li><strong>Prisma tegak</strong> — alas segi empat sembarang + tinggi prisma (sisi tegak tegak lurus alas).</li>
+      </ul>
+      <p><strong>Multithreading:</strong> untuk demo, <em>setiap bentuk</em> diproses di <strong>thread sendiri</strong> (<code>GeoProcessor</code> implements <code>Runnable</code>). Ada jeda (<code>Thread.sleep</code>) supaya terlihat bahwa thread bisa “bergantian” jalan. Log dicetak dengan <code>synchronized</code> agar baris tidak saling menyisip huruf.</p>
+      <p><strong>Ide OOP utama:</strong> tiga bentuk itu berbeda rumusnya, tapi bagi pemanggil (main, prosesor thread, GUI) semuanya hanya “sesuatu yang bisa <code>hitungLuas()</code> …”. Itu dicapai dengan <strong>interface</strong> <code>Geometri</code> dan <strong>polimorfisme</strong> (variabel bertipe <code>Geometri</code> bisa menunjuk ke objek konkret mana pun yang <code>implements Geometri</code>).</p>
+      <div class="callout"><strong>Untuk laporan:</strong> tulis satu paragraf tujuan (apa yang dihitung), satu paragraf desain OOP (interface + <strong>inheritance</strong> + overriding), satu paragraf concurrency (thread per bentuk, join, sinkronisasi log), dan satu paragraf antarmuka (konsol vs Swing).</div>
+    </section>
+
+    <section id="s2">
+      <h2>2. Konsep OOP dasar (bahasa sederhana)</h2>
+      <p>Sebelum “lima pilar”, ini istilah yang muncul terus di project:</p>
+      <dl class="line">
+        <dt>Class</dt>
+        <dd>Cetak biru / definisi: nama field (data) dan method (perilaku). Contoh: class <code>SegiEmpatSembarang</code> mendefinisikan sisi <code>a,b,c,d</code> dan cara menghitung luas.</dd>
+        <dt>Object (objek)</dt>
+        <dd>Isi nyata di memori saat program jalan: <code>new SegiEmpatSembarang(3,4,3,4, …)</code> menghasilkan <em>satu</em> segi empat dengan angka tertentu.</dd>
+        <dt>Interface</dt>
+        <dd>Kontrak: daftar method yang <em>harus</em> ada, tanpa isi rumus (di Java: method di interface, implementasi di class). <code>Geometri</code> memaksa semua bentuk punya <code>hitungLuas()</code>, <code>hitungKeliling()</code>, dst.</dd>
+        <dt><code>implements Geometri</code></dt>
+        <dd>Class “menandatangani kontrak”: ia berjanji mengisi semua method <code>Geometri</code>. Tiga class bentuk melakukan ini dengan rumus berbeda.</dd>
+        <dt>Inheritance (“is-a” / pewarisan)</dt>
+        <dd><code>LimasSegiEmpatSembarang</code> dan <code>PrismaSegiEmpatSembarang</code> <strong>extends SegiEmpatSembarang</strong>: mewarisi sisi, sudut, getter, serta bisa memanggil <code>super.hitungLuas()</code> / <code>super.hitungKeliling()</code>. Bangun 3D dimodelkan sebagai “segi empat sembarang + dimensi tambahan” (tinggi limas/prisma, tinggi sisi miring untuk limas).</dd>
+        <dt>Package</dt>
+        <dd>Semua file punya <code>package geometri;</code> supaya class saling kenal tanpa import panjang dalam satu modul kecil.</dd>
+      </dl>
+      <p><strong>Hirarki bentuk:</strong> <code>SegiEmpatSembarang</code> (induk, 2D) → <code>LimasSegiEmpatSembarang</code> / <code>PrismaSegiEmpatSembarang</code> (anak, 3D). Semua <code>implements Geometri</code>. GUI memakai pewarisan lain: <code>GeometriFrame extends JFrame</code>.</p>
+    </section>
+
+    <section id="s3">
+      <h2>3. Penjelasan tiap class &amp; file</h2>
+      <p>Berikut cocokkan dengan file di <code>src/geometri/</code> saat membaca kode atau menulis laporan.</p>
+
+      <h3><code>Geometri.java</code> — interface</h3>
+      <p>Hanya deklarasi method: <code>hitungLuas</code>, <code>hitungKeliling</code>, <code>hitungVolume</code>, <code>hitungLuasPermukaan</code>, <code>getInfo</code>. Tidak ada field. Peran: <strong>menyatukan</strong> cara memanggil bentuk 2D dan 3D dalam satu tipe referensi.</p>
+
+      <h3><code>SegiEmpatSembarang.java</code> — bentuk 2D</h3>
+      <ul>
+        <li><strong>Data:</strong> <code>private final double a,b,c,d</code> (sisi berurutan) dan <code>sudutA…sudutD</code> (derajat). <code>final</code> artinya setelah konstruktor selesai, nilai tidak diganti — cocok untuk model matematika yang stabil.</li>
+        <li><strong><code>hitungKeliling</code>:</strong> jumlah keempat sisi.</li>
+        <li><strong><code>hitungLuas</code>:</strong> cari panjang <strong>diagonal</strong> antara ujung sisi <code>a</code> dan <code>b</code> memakai <strong>cosinus</strong> pada sudut <code>B</code> (lihat bagian matematika), lalu bagi segi empat jadi dua segitiga yang sama-sama berbagi diagonal itu; tiap segitiga luasnya <strong>Heron</strong>.</li>
+        <li><strong><code>hitungVolume</code>:</strong> selalu <code>0.0</code> (bangun planar).</li>
+        <li><strong><code>hitungLuasPermukaan</code>:</strong> sama dengan luas (untuk 2D).</li>
+        <li><strong>Getter <code>getSisiA</code> … <code>getSisiD</code>:</strong> diwariskan ke subclass limas/prisma untuk menghitung luas sisi miring (panjang rusuk alas per sisi).</li>
+      </ul>
+
+      <h3><code>LimasSegiEmpatSembarang.java</code> — limas alas segi empat</h3>
+      <ul>
+        <li><strong>Deklarasi:</strong> <code>extends SegiEmpatSembarang implements Geometri</code> — mewarisi sisi/sudut dari induk; field tambahan: <code>tinggiLimas</code> dan empat <code>tinggiSisi*</code> (tinggi segitiga sisi miring di atas tiap rusuk).</li>
+        <li><strong>Konstruktor:</strong> <code>super(a,b,c,d,sudutA,…)</code> lalu menyimpan tinggi; dipanggil langsung dari <code>ShapeGenerator</code>.</li>
+        <li><strong><code>hitungLuas</code> / keliling:</strong> <code>@Override</code> — delegasi ke <code>super.hitungLuas()</code> / <code>super.hitungKeliling()</code> (luas/keliling alas).</li>
+        <li><strong><code>hitungVolume</code>:</strong> <code>@Override</code> — ⅓ × <code>super.hitungLuas()</code> × <code>tinggiLimas</code>.</li>
+        <li><strong><code>hitungLuasPermukaan</code>:</strong> luas alas (<code>super</code>) + empat segitiga: <code>0.5 * (getSisiX() * tinggiSisiX)</code>.</li>
+      </ul>
+
+      <h3><code>PrismaSegiEmpatSembarang.java</code> — prisma tegak</h3>
+      <ul>
+        <li><strong>Deklarasi:</strong> <code>extends SegiEmpatSembarang implements Geometri</code>; field tambahan: <code>tinggiPrisma</code>.</li>
+        <li><strong>Konstruktor:</strong> <code>super(...)</code> + <code>tinggiPrisma</code>.</li>
+        <li><strong><code>hitungVolume</code>:</strong> <code>super.hitungLuas() * tinggiPrisma</code>.</li>
+        <li><strong><code>hitungLuasPermukaan</code>:</strong> <code>2 * super.hitungLuas() + super.hitungKeliling() * tinggiPrisma</code>.</li>
+      </ul>
+
+      <h3><code>ShapeGenerator.java</code> — data uji acak</h3>
+      <ul>
+        <li>Class <code>final</code> dengan konstruktor <code>private</code>: tidak dibuat instansnya; hanya method statis <code>generateRandomShapes(min, max)</code>.</li>
+        <li>Mengembalikan <code>List&lt;Geometri&gt;</code> berisi campuran ketiga jenis bentuk (random).</li>
+        <li>Membantu demo multithreading tanpa mengetik bentuk manual.</li>
+      </ul>
+
+      <h3><code>GeoProcessor.java</code> — satu thread = satu bentuk</h3>
+      <ul>
+        <li><code>implements Runnable</code>: punya method <code>run()</code> yang dipanggil saat <code>Thread.start()</code>.</li>
+        <li>Menyimpan referensi <code>Geometri shape</code> — inilah polimorfisme: tidak peduli bentuknya apa, cukup panggil <code>shape.hitungLuas()</code> dll.</li>
+        <li><strong>Overloading konstruktor:</strong> versi tiga argumen (log ke konsol) vs empat argumen dengan <code>Consumer&lt;String&gt; logSink</code> untuk GUI.</li>
+        <li><strong><code>logLine</code>:</strong> <code>synchronized (LOCK)</code> memastikan hanya satu thread pada satu waktu yang menulis satu baris penuh ke <code>System.out</code> atau ke consumer.</li>
+        <li><strong>Exception:</strong> <code>InterruptedException</code> saat sleep — menangkap, mencetak error, lalu <code>Thread.currentThread().interrupt()</code> (praktik baik: menjaga flag interrupt).</li>
+      </ul>
+
+      <h3><code>Main.java</code> — mode konsol</h3>
+      <ul>
+        <li>Memanggil <code>ShapeGenerator.generateRandomShapes</code> dengan konstanta min/max.</li>
+        <li>Membuat array <code>Thread</code>, tiap thread membungkus <code>GeoProcessor</code> untuk satu elemen list.</li>
+        <li><code>start()</code> lalu <code>join()</code>: program utama menunggu semua selesai sebelum <code>printSummary</code>.</li>
+        <li><code>printSummary</code> memakai <code>synchronized (System.out)</code> agar ringkasan tidak bertabrakan dengan sisa output.</li>
+      </ul>
+
+      <h3><code>GeometriFrame.java</code> — mode GUI (Swing)</h3>
+      <ul>
+        <li>Parameter: spinner min/max jumlah bentuk, min/max delay (ms).</li>
+        <li><strong>Pisah thread:</strong> klik “Jalankan” membuat thread <strong>koordinator</strong> (<code>runBatch</code>) — supaya EDT (thread UI) tidak diblokir saat <code>join</code>.</li>
+        <li>Worker thread memakai <code>GeoProcessor(..., toEdt)</code> dengan <code>toEdt</code> = lambda yang meneruskan setiap baris log ke <code>SwingUtilities.invokeLater(() -&gt; appendLogLine(line))</code> — <strong>aturan Swing:</strong> mengubah komponen UI hanya dari EDT.</li>
+        <li>Setelah semua <code>join</code>, mengisi <code>JTable</code> lewat <code>invokeLater</code> lagi. Kolom volume: <code>—</code> hanya untuk instance 2D murni (<code>getClass() == SegiEmpatSembarang.class</code>), karena limas/prisma juga <code>extends</code> segi empat.</li>
+        <li>Tombol “Hentikan” memanggil <code>interrupt()</code> pada worker threads yang masih hidup.</li>
+      </ul>
+    </section>
+
+    <section id="s4">
+      <h2>4. Alur program — langkah demi langkah</h2>
+
+      <h3>4.1 Mode konsol (<code>Main.main</code>)</h3>
+      <ol>
+        <li>Cetak judul.</li>
+        <li>Panggil <code>ShapeGenerator.generateRandomShapes(JUMLAH_BENTUK_MIN, JUMLAH_BENTUK_MAX)</code> → dapat <code>List&lt;Geometri&gt;</code> berisi N objek (N acak di rentang tersebut).</li>
+        <li>Buat array <code>Thread[]</code> sepanjang N. Untuk indeks <code>i</code>: buat <code>GeoProcessor(shapes.get(i), "Thread-"+(i+1), delayMs)</code> dengan delay acak, lalu <code>threads[i] = new Thread(processor, "GeoWorker-"+(i+1))</code>.</li>
+        <li>Loop: <code>t.start()</code> untuk semua thread — urutan selesai tidak dijamin.</li>
+        <li>Loop: <code>t.join()</code> — thread utama berhenti di sini sampai tiap worker selesai (atau interrupt).</li>
+        <li><code>printSummary(shapes)</code>: di thread utama, loop lagi tiap <code>Geometri g</code> dan panggil method hitung (bukan lewat <code>GeoProcessor</code> lagi) untuk menampilkan ringkasan angka.</li>
+      </ol>
+      <p class="note">Jadi ada dua fase: (A) proses paralel dengan log panjang per thread; (B) ringkasan singkat sequential di akhir.</p>
+
+      <h3>4.2 Mode GUI (<code>GeometriFrame</code>)</h3>
+      <ol>
+        <li>User mengisi spinner → klik <strong>Jalankan</strong>. Validasi min ≤ max, delay min ≤ max.</li>
+        <li>UI dinonaktifkan sementara (tombol jalankan off, progress “Berjalan…”).</li>
+        <li>Thread koordinator <code>runBatch</code> jalan: generate list bentuk sama seperti konsol.</li>
+        <li>Untuk tiap bentuk: buat <code>GeoProcessor</code> dengan <code>Consumer</code> yang meneruskan log ke EDT.</li>
+        <li><code>start()</code> semua worker → <code>join()</code> semua (masih di thread koordinator, bukan EDT).</li>
+        <li>Setelah join: <code>invokeLater</code> untuk mengisi tabel ringkasan.</li>
+        <li><code>finally</code>: kembalikan tombol dan progress ke “Siap”.</li>
+      </ol>
+      <div class="callout"><strong>Inti untuk laporan:</strong> jelaskan perbedaan <em>worker thread</em> (hitung + log) vs <em>thread koordinator</em> (GUI) vs <em>EDT</em> (menggambar ulang <code>JTextArea</code> dan <code>JTable</code>). Gambarkan: worker tidak boleh menyentuh komponen Swing langsung.</div>
+    </section>
+
+    <section id="s5">
+      <h2>5. Lima pilar OOP — penjelasan mendalam + bukti di kode</h2>
+      <p>Urutan di bawah mengikuti modul umum “lima pilar”. Tiap pilar: <em>apa itu</em> → <em>kenapa dipakai</em> → <em>bukti konkret di project</em>.</p>
+
+      <h3>5.1 Encapsulation &amp; information hiding</h3>
+      <p><strong>Pengertian sederhana:</strong> detail internal objek disembunyikan; dunia luar berinteraksi lewat antarmuka terbatas (method publik, getter), bukan dengan mengubah data sembarangan.</p>
+      <p><strong>Di project:</strong> sisi dan sudut segi empat <code>private final</code> di induk — subclass limas/prisma mengakses panjang sisi hanya lewat getter <code>getSisiA()</code> … yang diwariskan. Di <code>GeoProcessor</code>, method <code>displayProcessingStatus</code> / <code>displayResult</code> adalah <code>private</code>.</p>
+      <p><strong>Kalimat untuk dosen:</strong> “Kami membungkus data bentuk di dalam class dan hanya mengekspos apa yang dibutuhkan pemanggil, sesuai interface <code>Geometri</code>.”</p>
+
+      <h3>5.2 Inheritance (pewarisan)</h3>
+      <p><strong>Pengertian:</strong> class anak mewarisi kode/data class induk; relasi “is-a”.</p>
+      <p><strong>Di project:</strong> <code>LimasSegiEmpatSembarang</code> dan <code>PrismaSegiEmpatSembarang</code> <strong>extends SegiEmpatSembarang</strong> — mewarisi field sisi/sudut, getter, serta memakai <code>super</code> untuk luas/keliling alas. <code>GeometriFrame extends JFrame</code> (pewarisan GUI). Polimorfisme tetap lewat <code>Geometri</code>; subclass juga bisa dirujuk sebagai <code>SegiEmpatSembarang</code> jika perlu data alas.</p>
+      <p><strong>Kalimat untuk dosen:</strong> “Limas dan prisma adalah segi empat sembarang yang diperluas dengan tinggi — kami pakai inheritance supaya rumus alas tidak diduplikasi; volume dan luas permukaan di-<em>override</em> di class anak.”</p>
+
+      <h3>5.3 Overloading</h3>
+      <p><strong>Pengertian:</strong> nama method (atau konstruktor) sama, daftar parameter berbeda.</p>
+      <p><strong>Di project:</strong> dua konstruktor <code>GeoProcessor</code> (dengan/tanpa <code>Consumer&lt;String&gt;</code> untuk log GUI).</p>
+
+      <h3>5.4 Overriding &amp; polymorphism</h3>
+      <p><strong>Overriding:</strong> class implementasi menulis ulang method dari kontrak interface dengan isi sendiri.</p>
+      <p><strong>Polimorfisme:</strong> variabel bertipe <code>Geometri</code> bisa menunjuk ke <code>SegiEmpatSembarang</code>, <code>Limas…</code>, atau <code>Prisma…</code>. Saat memanggil <code>shape.hitungVolume()</code>, JVM memilih implementasi sesuai objek sebenarnya — pemanggil tidak perlu <code>if (shape instanceof …)</code> untuk rumus dasar.</p>
+      <p><strong>Di project:</strong> loop di <code>GeoProcessor.run</code> dan loop ringkasan di <code>Main</code> / tabel GUI semuanya memakai referensi <code>Geometri</code>.</p>
+
+      <h3>5.5 Multithreading</h3>
+      <p><strong>Pengertian:</strong> lebih dari satu jalur eksekusi; <code>Runnable</code> + <code>Thread</code>; <code>start</code> / <code>sleep</code> / <code>join</code>; sinkronisasi saat sumber daya bersama (di sini: saluran log).</p>
+      <p><strong>Di project:</strong> <code>GeoProcessor implements Runnable</code>; <code>synchronized (LOCK)</code> pada <code>logLine</code>; <code>join</code> di konsol dan koordinator GUI; penanganan <code>InterruptedException</code>.</p>
+    </section>
+
+    <section id="s6">
+      <h2>6. Matematika dari nol (yang dipakai program)</h2>
+      <p>Bagian ini untuk memahami <em>mengapa</em> rumus di kode seperti itu. Tidak perlu lulus kalkulus; cukup geometri SMA dan sedikit trigonometri.</p>
+
+      <h3>6.1 Keliling segi empat</h3>
+      <p>Jika empat sisi berurutan <code>a, b, c, d</code> membentuk satu putaran, <strong>keliling = a + b + c + d</strong>. Itu langsung di <code>hitungKeliling</code>.</p>
+
+      <h3>6.2 Luas segitiga (Heron)</h3>
+      <p>Jika sebuah segitiga punya sisi panjang <code>x, y, z</code> (ketiganya diketahui), luasnya bisa dihitung tanpa sudut:</p>
+      <ul>
+        <li>Setengah keliling: <code>s = (x + y + z) / 2</code></li>
+        <li>Luas: <code>sqrt(s * (s-x) * (s-y) * (s-z))</code> asalkan segitiga valid (di kode, jika dalam akar ≤ 0, dikembalikan 0).</li>
+      </ul>
+      <p>Ini dipakai di method statis <code>heron(x,y,z)</code> pada <code>SegiEmpatSembarang</code>.</p>
+
+      <h3>6.3 Aturan kosinus untuk diagonal</h3>
+      <p>Bayangkan segi empat dengan sisi pertama <code>a</code> dan <code>b</code> bertemu di sebuah vertex, dan sudut <strong>di dalam</strong> di vertex itu adalah <code>sudutB</code> (sesuai penamaan di kode: sudut antara sisi <code>a</code> dan <code>b</code>).</p>
+      <p>Panjang diagonal <code>d</code> yang menutup segitiga dari sisi <code>a</code> dan <code>b</code> memenuhi:</p>
+      <p><strong>d² = a² + b² − 2ab cos(θ)</strong> dengan θ dalam <strong>radian</strong> — di Java: <code>Math.toRadians(sudutB)</code> lalu <code>Math.cos</code>.</p>
+      <p>Setelah <code>d</code> diketahui, segi empat dipotong diagonal itu jadi <strong>dua segitiga</strong>: (a, b, d) dan (c, d, d) — perhatikan segitiga kedua memakai sisi <code>c</code>, <code>d</code>, dan diagonal yang sama <code>d</code>. Luas total = Heron segitiga 1 + Heron segitiga 2. Itu persis alur <code>hitungLuas()</code>.</p>
+      <div class="callout"><strong>Kenapa ada sudut kalau kita sudah punya sisi?</strong> Empat sisi saja belum tentu menentukan satu bentuk unik (bisa “flex”). Program memakai <code>sudutB</code> untuk menentukan diagonal utama yang memecah luas; sudut lain ikut disimpan untuk konsistensi data dan teks <code>getInfo</code>.</div>
+
+      <h3>6.4 Volume &amp; luas permukaan limas</h3>
+      <ul>
+        <li><strong>Volume:</strong> luas alas × tinggi × <strong>⅓</strong>. Luas alas dari induk: <code>super.hitungLuas()</code>.</li>
+        <li><strong>Luas permukaan:</strong> luas alas + jumlah empat segitiga sisi tegak. Luas segitiga = ½ × alas segitiga × tinggi. “Alas segitiga” tiap sisi = rusuk alas (<code>getSisiA()</code> …); “tinggi” = <code>tinggiSisiA</code> … yang diinput/dibangkitkan.</li>
+      </ul>
+
+      <h3>6.5 Volume &amp; luas permukaan prisma tegak</h3>
+      <ul>
+        <li><strong>Volume:</strong> luas alas × tinggi prisma (tegak lurus alas).</li>
+        <li><strong>Luas permukaan:</strong> dua tutup (atas+bawah) + selimut persegi panjang yang “dipelintir”: keliling alas × tinggi prisma.</li>
+      </ul>
+
+      <h3>6.6 Angka di tabel untuk bentuk 2D</h3>
+      <p>Volume bangun 2D tidak terdefinisi; di kode nilainya 0, di GUI ditampilkan <code>—</code> agar pembaca tidak mengira volume 0 “valid”.</p>
+    </section>
+
+    <section id="s7">
+      <h2>7. Materi kuliah → bagian project</h2>
+      <table>
+        <thead><tr><th>Tema (ringkas)</th><th>Terlihat di project</th></tr></thead>
+        <tbody>
+          <tr><td>Dasar Java / OOP</td><td>Class, object, <code>package</code>, method, <code>static</code> generator, field <code>final</code>.</td></tr>
+          <tr><td>Interface</td><td><code>interface Geometri</code>; semua bentuk <code>implements</code>.</td></tr>
+          <tr><td>Exception</td><td><code>try/catch InterruptedException</code>, <code>interrupt()</code>, validasi argumen generator.</td></tr>
+          <tr><td>Collection</td><td><code>List&lt;Geometri&gt;</code>, <code>ArrayList</code>.</td></tr>
+          <tr><td>Multithreading</td><td><code>Runnable</code>, <code>Thread</code>, <code>sleep</code>, <code>join</code>, <code>synchronized</code>.</td></tr>
+          <tr><td>Swing</td><td><code>JFrame</code>, spinner, button, text area, table, split pane, <code>SwingUtilities.invokeLater</code>.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="s8">
+      <h2>8. Flowchart mendetail + narasi “kata-katanya”</h2>
+      <p>Diagram memakai <strong>simbol flowchart standar</strong> (Terminator, Proses, Keputusan, Input/Output, Subprogram). Panduan baca lengkap: <a href="PENJELASAN_FLOWCHART_LENGKAP.md"><code>PENJELASAN_FLOWCHART_LENGKAP.md</code></a>. Arti output program: <a href="PENJELASAN_OUTPUT_LENGKAP.md"><code>PENJELASAN_OUTPUT_LENGKAP.md</code></a>.</p>
+
+      <h3>Legenda simbol (sesuai materi flowchart)</h3>
+      <table>
+        <thead><tr><th>Bentuk di diagram</th><th>Nama</th><th>Arti di project ini</th></tr></thead>
+        <tbody>
+          <tr><td>Oval <code>([ ... ])</code></td><td>Terminator</td><td>Mulai / selesai alur</td></tr>
+          <tr><td>Kotak <code>[ ... ]</code></td><td>Proses</td><td>Langkah di komputer (loop, hitung, start thread)</td></tr>
+          <tr><td>Belah ketupat <code>{ ... }</code></td><td>Keputusan</td><td>Ya/tidak, konsol/GUI, jenis bentuk</td></tr>
+          <tr><td>Jajar genjang <code>[/ ... /]</code></td><td>Input / Output</td><td>Parameter, cetak log, return list, isi tabel</td></tr>
+          <tr><td>Kotak bergaris ganda <code>[[ ... ]]</code></td><td>Subprogram</td><td>Panggil method lain (generator, random*, exception)</td></tr>
+          <tr><td>Panah</td><td>Alur</td><td>Urutan eksekusi — ikuti arah panah</td></tr>
+        </tbody>
+      </table>
+      <p class="note">Di <strong>draw.io</strong>: <em>Arrange → Insert → Advanced → Mermaid…</em> tempel isi file <code>.mmd</code>, atau gambar manual pakai bentuk Terminator / Process / Decision / Parallelogram dari toolbar.</p>
+
+      <h3>Urutan slide (diagram 01–06 berurutan; master = 06 di akhir)</h3>
+      <ol>
+        <li><strong>Mulai verbal / demo singkat</strong> tanpa diagram besar: jelaskan tujuan (banyak bentuk, interface <code>Geometri</code>, thread per bentuk).</li>
+        <li><strong>Diagram 01</strong> — dari mana list bentuk dan validasinya.</li>
+        <li><strong>Diagram 02</strong> — kenapa log tidak campur (<code>synchronized</code>).</li>
+        <li><strong>Diagram 03</strong> — isi satu <code>GeoProcessor.run</code>.</li>
+        <li><strong>Diagram 04</strong> — polimorfisme saat <code>shape.hitung…</code>.</li>
+        <li><strong>Diagram 05</strong> — hanya jika bahas GUI: EDT, koordinator, <code>invokeLater</code>.</li>
+        <li><strong>Baru setelah semua bagian</strong> — buka <strong>diagram 06 (terakhir, master)</strong>: “Ini satu peta yang mengikat tadi kita pecah ke beberapa slide.” Lalu boleh buka IDE / jalankan program.</li>
+      </ol>
+      <div class="callout"><strong>Transisi ke kode (contoh kalimat):</strong> “Kalau diagram tadi kita pecah ke file Java, bagian ‘bangkitkan list’ ada di <code>ShapeGenerator.java</code>, bagian ‘satu thread satu bentuk’ ada di <code>GeoProcessor.java</code>, dan ‘tunggu semua selesai’ ada di <code>join</code> di <code>Main</code> atau di thread koordinator GUI.”</div>
+
+      <h3>Skrip pembukaan ±90 detik (latihan verbal)</h3>
+      <p>“Project kami menghitung geometri untuk tiga bentuk, tapi dari sisi kode kita memperlakukan mereka seragam lewat interface <code>Geometri</code>. Setelah data bentuk siap dalam sebuah <code>List</code>, program membuat satu thread untuk tiap bentuk supaya simulasi bisa jalan paralel. Ada dua kunci multithreading: <code>join</code> supaya ringkasan tidak muncul terlalu cepat, dan <code>synchronized</code> pada log supaya baris tidak saling menyisip. Nanti, setelah kita pecah per bagian, saya tunjukkan <strong>satu diagram master di akhir</strong> yang merangkum semuanya.”</p>
+
+      <h3>Checklist saat pindah dari flowchart ke IDE</h3>
+      <ul>
+        <li>Buka <code>Geometri.java</code> terlebih dahulu (kontrak), lalu satu class bentuk, lalu <code>GeoProcessor.java</code> — urutan ini mengikuti cara berpikir diagram 04 lalu 03.</li>
+        <li>Di <code>Main.java</code>, tunjuk loop yang membuat <code>Thread</code> dan baris <code>join</code> — itu nanti terlihat lagi di <strong>diagram 06 (master)</strong> bagian join.</li>
+        <li>Untuk GUI, minimalkan file yang terbuka: cukup <code>GeometriFrame.java</code> dan sorot <code>runBatch</code> serta lambda <code>toEdt</code>.</li>
+      </ul>
+
+      <div class="files">
+        <strong>File sumber (.mmd) — impor ke draw.io:</strong><br />
+        <strong>Per bagian (jelaskan dulu):</strong>
+        <a href="mermaid/01-shapegenerator.mmd">01-shapegenerator</a> ·
+        <a href="mermaid/02-sinkronisasi-log.mmd">02-sinkronisasi-log</a> ·
+        <a href="mermaid/03-geoprocessor.mmd">03-geoprocessor</a> ·
+        <a href="mermaid/04-polimorfisme.mmd">04-polimorfisme</a> ·
+        <a href="mermaid/05-gui-edt.mmd">05-gui-edt</a>
+        <br />
+        <strong>Master di akhir (selalu nomor 06):</strong>
+        <a href="mermaid/06-alur-master-keseluruhan.mmd">06-alur-master-keseluruhan.mmd</a> — satu diagram rangkum penuh setelah audiensi paham diagram 01–05.
+      </div>
+
+      <h3>Diagram 01 — isi <code>ShapeGenerator.generateRandomShapes</code></h3>
+      <p class="step-ref">File <code>mermaid/01-shapegenerator.mmd</code>. Zoom-in kalau ditanya “kenapa bentuknya acak?” atau “validasi di mana?”.</p>
+      <div class="mermaid-wrap"><pre class="mermaid">flowchart TD
+    START([Mulai generateRandomShapes]) --> IN[/Input minCount maxCountInclusive/]
+    IN --> D1{minCount >= 1?}
+    D1 -->|Tidak| ERR[[IllegalArgumentException]]
+    D1 -->|Ya| D2{max >= min?}
+    D2 -->|Tidak| ERR
+    D2 -->|Ya| P1[N = minCount + random inklusif]
+    P1 --> P2[Buat ArrayList kosong]
+    P2 --> P3[i = 0]
+    P3 --> D3{i kurang dari N?}
+    D3 -->|Tidak| OUT[/return List Geometri/]
+    OUT --> END([Selesai])
+    D3 -->|Ya| D4{kind acak 0 1 2?}
+    D4 -->|0| SP[[randomSegiEmpatSembarang]]
+    D4 -->|1| LP[[randomLimasSegiEmpatSembarang]]
+    D4 -->|2| PP[[randomPrismaSegiEmpatSembarang]]
+    SP --> P4[shapes.add]
+    LP --> P4
+    PP --> P4
+    P4 --> P5[i increment]
+    P5 --> D3</pre></div>
+      <details class="narasi">
+        <summary>Narasi detail: generator sebagai “pabrik data demo”</summary>
+        <div class="narasi-body">
+          <ol class="talk">
+            <li>“Generator bukan bagian matematika inti — dia mempermudah demo: kita butuh banyak objek berbeda jenis tanpa input manual.”</li>
+            <li>“Validasi di awal mencegah list kosong atau min–max terbalik — ini contoh defensive programming.”</li>
+            <li>“Angka 0, 1, 2 adalah tiga cabang: 2D, limas, prisma — persis tiga class yang <code>implements Geometri</code>.”</li>
+          </ol>
+          <p><strong>Loncat ke kode:</strong> <code>ShapeGenerator.java</code>, method <code>generateRandomShapes</code> dan helper <code>random*</code> private.</p>
+        </div>
+      </details>
+
+      <h3>Diagram 02 — sinkronisasi log (<code>synchronized</code>)</h3>
+      <p class="step-ref">File <code>mermaid/02-sinkronisasi-log.mmd</code>. Pakai saat menjelaskan kenapa log tidak berantakan.</p>
+      <div class="mermaid-wrap"><pre class="mermaid">flowchart TD
+    START([Worker memanggil logLine]) --> P1[Masuk synchronized LOCK static]
+    P1 --> D1{logSink null?}
+    D1 -->|Ya konsol| IO1[/Output System.out.println/]
+    D1 -->|Tidak GUI| IO2[/Output logSink.accept ke Consumer/]
+    IO1 --> P2[Keluar blok synchronized]
+    IO2 --> P2
+    P2 --> END([Selesai logLine])</pre></div>
+      <details class="narasi">
+        <summary>Narasi detail: analogi antrian satu pintu</summary>
+        <div class="narasi-body">
+          <ol class="talk">
+            <li>“Bayangkan banyak orang mau bicara lewat satu mikrofon: kalau tidak bergantian, suara saling tumpuk. Di program, ‘mikrofon’ itu <code>System.out</code> atau satu consumer ke area teks.”</li>
+            <li>“<code>synchronized (LOCK)</code> memaksa: satu thread selesaikan seluruh baris dulu, baru giliran thread lain.”</li>
+            <li>“Ini berbeda dari join: <code>join</code> menunggu thread selesai total; <code>synchronized</code> mengatur akses ke sumber daya bersama berulang kali.”</li>
+          </ol>
+          <p><strong>Loncat ke kode:</strong> <code>GeoProcessor.logLine</code> — satu objek <code>LOCK</code> static dipakai semua instansi <code>GeoProcessor</code>.</p>
+        </div>
+      </details>
+
+      <h3>Diagram 03 — isi <code>GeoProcessor.run</code> (satu worker)</h3>
+      <p class="step-ref">File <code>mermaid/03-geoprocessor.mmd</code>. Cocok setelah audiensi paham “satu bentuk = satu thread”.</p>
+      <div class="mermaid-wrap"><pre class="mermaid">flowchart TD
+    START([Thread.start memanggil run]) --> P1[displayProcessingStatus via logLine synchronized]
+    P1 --> IO1[/Output MEMPROSES Thread ID getInfo/]
+    IO1 --> P2[Thread.sleep delayMs]
+    P2 --> D1{InterruptedException?}
+    D1 -->|Ya| P3[/Output ERROR + interrupt flag/]
+    P3 --> END([run selesai])
+    D1 -->|Tidak| P5[hitung luas keliling volume luasPermukaan]
+    P5 --> P9[displayResult via logLine synchronized]
+    P9 --> IO2[/Output empat angka hasil/]
+    IO2 --> END</pre></div>
+      <details class="narasi">
+        <summary>Narasi detail: urutan yang kamu jelaskan sambil tunjuk panah</summary>
+        <div class="narasi-body">
+          <ol class="talk">
+            <li>“Thread tidak langsung hitung: dulu kita cetak <em>siapa</em> yang diproses — nama class bentuk, ID thread, dan <code>getInfo</code> supaya auditor bisa cocokkan dengan tabel nanti.”</li>
+            <li>“Lalu <code>sleep</code>: ini sengaja supaya di demo terlihat interleaving; di dunia nyata bisa mewakili kerja I/O atau komputasi yang tidak instan.”</li>
+            <li>“Setelah bangun, kita panggil empat method lewat referensi <code>Geometri</code> — di sinilah polimorfisme (diagram 04).”</li>
+            <li>“Setiap baris ke layar lewat <code>logLine</code> yang <code>synchronized</code> — hubungkan dengan diagram 02.”</li>
+            <li>“Kalau <code>interrupt</code> saat tidur, kita tangkap exception, cetak error, dan panggil <code>interrupt()</code> lagi supaya flag interrupt tidak ‘hilang’.”</li>
+          </ol>
+          <p><strong>Loncat ke kode:</strong> buka <code>GeoProcessor.java</code>, scroll ke <code>run()</code>, tunjuk urutan sama dengan diagram.</p>
+        </div>
+      </details>
+
+      <h3>Diagram 04 — polimorfisme: satu panggilan, tiga perilaku</h3>
+      <p class="step-ref">File <code>mermaid/04-polimorfisme.mmd</code>. Pakai setelah diagram 03 saat menjelaskan baris <code>shape.hitungLuas()</code>.</p>
+      <div class="mermaid-wrap"><pre class="mermaid">flowchart TD
+    START([Pemanggilan di GeoProcessor.run]) --> P1[Variabel Geometri shape]
+    P1 --> P2[shape.hitungLuas Keliling Volume LuasPermukaan]
+    P2 --> D1{Runtime tipe objek?}
+    D1 -->|SegiEmpatSembarang| R1[Override Heron volume 0]
+    D1 -->|Limas extends SegiEmpat| R2[super.hitungLuas volume limas LP limas]
+    D1 -->|Prisma extends SegiEmpat| R3[super.hitungLuas volume prisma LP prisma]
+    R1 --> OUT[/Return double ke GeoProcessor/]
+    R2 --> OUT
+    R3 --> OUT
+    OUT --> END([Lanjut displayResult])</pre></div>
+      <details class="narasi">
+        <summary>Narasi detail: menjelaskan dynamic dispatch tanpa istilah berat</summary>
+        <div class="narasi-body">
+          <ol class="talk">
+            <li>“Di <code>GeoProcessor</code>, variabelnya bertipe <code>Geometri</code>. Itu artinya: kita hanya janji punya method hitung — tidak janji bentuknya limas atau prisma.”</li>
+            <li>“Saat program jalan, JVM melihat objek <em>sebenarnya</em> di heap: kalau isinya limas, yang dipanggil rumus limas; kalau prisma, rumus prisma.”</li>
+            <li>“Limas dan prisma <strong>extends</strong> segi empat: luas/keliling alas lewat <code>super.hitungLuas()</code> — tidak menduplikasi rumus Heron di class anak.”</li>
+            <li>“Untuk laporan: ini contoh overriding dari kontrak interface + polimorfisme lewat referensi induk.”</li>
+          </ol>
+          <p><strong>Loncat ke kode:</strong> bandingkan <code>SegiEmpatSembarang.java</code>, <code>LimasSegiEmpatSembarang.java</code>, <code>PrismaSegiEmpatSembarang.java</code> pada method dengan anotasi <code>@Override</code>.</p>
+        </div>
+      </details>
+
+      <h3>Diagram 05 — GUI: EDT, koordinator, <code>invokeLater</code></h3>
+      <p class="step-ref">File <code>mermaid/05-gui-edt.mmd</code>. Pakai hanya saat kamu demo atau menjelaskan <code>GeometriFrame</code>.</p>
+      <div class="mermaid-wrap"><pre class="mermaid">flowchart TD
+    START([Program GUI main]) --> P0[invokeLater tampilkan frame]
+    P0 --> WAIT([Tunggu user])
+    WAIT --> IN[/Input spinner min max bentuk dan delay/]
+    IN --> D1{Validasi min le max dan delay?}
+    D1 -->|Tidak| IO1[/Output JOptionPane/]
+    IO1 --> WAIT
+    D1 -->|Ya| P1[clearAllOutput matikan Jalankan progress Berjalan]
+    P1 --> P2[start thread koordinator runBatch]
+    P2 --> C1[/Output log judul batch/]
+    C1 --> C2[[ShapeGenerator.generateRandomShapes]]
+    C2 --> C3[Loop GeoProcessor + new Thread tiap bentuk]
+    C3 --> C4[start semua worker]
+    C4 --> C5[join semua worker di koordinator]
+    C5 --> P3[invokeLater fillSummaryTable]
+    P3 --> IO2[/Output JTable dan pesan selesai/]
+    IO2 --> P4[finally invokeLater pulihkan UI]
+    P4 --> END([Batch selesai])</pre></div>
+      <details class="narasi">
+        <summary>Narasi detail: kenapa GUI “muter” thread lebih banyak</summary>
+        <div class="narasi-body">
+          <ol class="talk">
+            <li>“Swing punya EDT — satu jalur yang aman mengubah komponen. Kita tidak boleh blokir EDT dengan <code>join</code> panjang, makanya <code>runBatch</code> jalan di thread lain.”</li>
+            <li>“Worker thread juga tidak boleh langsung sentuh <code>JTextArea</code>; lewat <code>Consumer</code> kita serahkan ke <code>invokeLater</code> supaya append teks terjadi di EDT.”</li>
+            <li>“Setelah semua worker selesai, koordinator mem-schedule pengisian tabel ke EDT juga — karena mengubah model tabel harus konsisten dengan aturan UI.”</li>
+            <li>“Blok <code>finally</code> memastikan tombol dan progress balik normal meski ada error — ini pola ‘cleanup’ yang sering disebut dosen.”</li>
+          </ol>
+          <p><strong>Loncat ke kode:</strong> <code>GeometriFrame.startRun</code>, lambda <code>toEdt</code>, method <code>runBatch</code>, dan <code>fillSummaryTable</code>.</p>
+        </div>
+      </details>
+
+      <h3>Diagram 06 (terakhir) — master keseluruhan</h3>
+      <p class="step-ref">File <code>mermaid/06-alur-master-keseluruhan.mmd</code>. Satu peta dari start program sampai ringkasan; tampilkan <strong>hanya setelah</strong> 01 → 02 → 03 → 04 → (05). Kotak panjang di tengah merujuk isi diagram 03 (worker) dan 02 (sinkronisasi log); cabang GUI merujuk diagram 05.</p>
+      <div class="mermaid-wrap"><pre class="mermaid">flowchart TB
+    START([Mulai program]) --> ENTRY{Mode jalankan?}
+    ENTRY -->|java Main| K_IN[/Input konstanta JUMLAH_BENTUK_MIN MAX/]
+    ENTRY -->|GeometriFrame| G_IN[/Input spinner user + klik Jalankan/]
+    G_IN --> G_VAL{Input valid?}
+    G_VAL -->|Tidak| G_WARN[/Output JOptionPane/]
+    G_WARN --> G_WAIT([Tunggu user])
+    G_VAL -->|Ya| G_CLR[Bersihkan log dan tabel]
+    K_IN --> GEN
+    G_CLR --> GEN
+    GEN[[ShapeGenerator.generateRandomShapes diagram 01]] --> LIST[List Geometri N objek]
+    LIST --> LOOP1[Untuk i buat GeoProcessor + Thread]
+    LOOP1 --> START_TH[start semua thread]
+    START_TH --> PAR[Paralel GeoProcessor.run diagram 02 03 04]
+    PAR --> JOIN[join semua thread]
+    JOIN --> OUT_MODE{Keluaran?}
+    OUT_MODE -->|Konsol| K_OUT[/Output printSummary/]
+    OUT_MODE -->|GUI| G_OUT[/Output invokeLater JTable/]
+    K_OUT --> END([Selesai batch])
+    G_OUT --> G_FIN[finally pulihkan UI]
+    G_FIN --> END</pre></div>
+      <details class="narasi">
+        <summary>Narasi penutup: mengikat slide-slide sebelumnya</summary>
+        <div class="narasi-body">
+          <ol class="talk">
+            <li>“Kalau kita tarik ulang dari awal: program masuk lewat konsol atau GUI; kalau GUI, validasi dulu seperti di diagram 05 bagian input.”</li>
+            <li>“Lalu selalu lewat generator yang barusan kita zoom di diagram 01 — keluar <code>List&lt;Geometri&gt;</code>.”</li>
+            <li>“Kotak paralel mengingatkan: banyak thread; isi tiap thread sama polanya dengan diagram 03, dan setiap cetak lewat pintu satu seperti diagram 02.”</li>
+            <li>“Empat hitungan di dalam worker adalah polimorfisme dari diagram 04.”</li>
+            <li>“Terakhir <code>join</code> mengunci urutan: ringkasan tidak boleh muncul sebelum semua worker selesai; di GUI, lanjutan ke tabel mengikuti diagram 05.”</li>
+          </ol>
+        </div>
+      </details>
+    </section>
+
+    <section id="s9">
+      <h2>9. Cheat sheet Q&amp;A (untuk presentasi / bimbingan)</h2>
+      <ul>
+        <li><strong>Di mana “segi empat sembarang” pada limas/prisma?</strong> Diwariskan dari <code>SegiEmpatSembarang</code> (sisi/sudut di induk); luas alas = <code>super.hitungLuas()</code> atau getter <code>getSisiA()</code> … <code>getSisiD()</code>.</li>
+        <li><strong>Kenapa ada sudut dan tinggi sisi limas?</strong> Sudut+sisi membentuk alas; tinggi sisi tegak dipakai rumus luas sisi miring Σ ½ sᵢhᵢ.</li>
+        <li><strong>Kenapa volume 2D “—” di GUI?</strong> Bangun planar tidak punya volume; tampilan membedakan dari angka 0.</li>
+        <li><strong>Sinkronisasi untuk apa?</strong> Satu saluran output; tanpa lock, baris log bisa tercampur.</li>
+        <li><strong>Polimorfisme satu kalimat?</strong> Satu tipe <code>Geometri</code>, banyak implementasi; pemanggilan method mengikuti objek nyata.</li>
+      </ul>
+    </section>
+
+    <footer>Diselaraskan dengan kode di <code>src/geometri/</code>. Dokumen Markdown tambahan: <code>PRESENTASI_LENGKAP.md</code>.</footer>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>
+    mermaid.initialize({ startOnLoad: true, theme: "neutral", securityLevel: "loose" });
+  </script>
+</body>
+</html>

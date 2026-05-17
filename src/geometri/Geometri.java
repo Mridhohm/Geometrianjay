@@ -1,8 +1,5 @@
 package geometri;
 
-/**
- * Kontrak perhitungan geometri untuk bentuk 2D dan 3D.
- */
 public interface Geometri {
 
     double hitungLuas();

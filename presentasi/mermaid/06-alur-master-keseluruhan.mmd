@@ -1,0 +1,35 @@
+%% Diagram 06 TERAKHIR — Master alur program (konsol + GUI)
+%% Tampilkan setelah diagram 01-05. Simbol flowchart standar.
+flowchart TB
+    START([Mulai program]) --> ENTRY{Mode jalankan?}
+
+    ENTRY -->|java Main| K_IN[/Input: konstanta JUMLAH_BENTUK_MIN MAX di Main/]
+    ENTRY -->|GeometriFrame| G_IN[/Input: spinner user + klik Jalankan/]
+
+    G_IN --> G_VAL{Input valid?}
+    G_VAL -->|Tidak| G_WARN[/Output: JOptionPane/]
+    G_WARN --> G_WAIT([Tunggu user])
+    G_VAL -->|Ya| G_CLR[Bersihkan log dan tabel]
+
+    K_IN --> GEN
+    G_CLR --> GEN
+
+    GEN[[ShapeGenerator.generateRandomShapes — lihat diagram 01]] --> LIST[List Geometri N objek]
+
+    LIST --> LOOP1[Untuk i = 0 .. N-1]
+    LOOP1 --> P_GP[Buat GeoProcessor shapes i, Thread-id, delay]
+    P_GP --> P_TH[new Thread Runnable GeoWorker-i]
+    P_TH --> LOOP1
+    LOOP1 -->|selesai loop| START_TH[start semua thread]
+
+    START_TH --> PAR["Paralel: N x GeoProcessor.run — diagram 03, log sync diagram 02, hitung diagram 04"]
+
+    PAR --> JOIN[join semua thread di main atau koordinator]
+
+    JOIN --> OUT_MODE{Keluaran?}
+    OUT_MODE -->|Konsol| K_OUT[/Output: printSummary ke System.out/]
+    OUT_MODE -->|GUI| G_OUT[/Output: invokeLater isi JTable volume 2D = strip/]
+
+    K_OUT --> END([Selesai satu batch])
+    G_OUT --> G_FIN[finally: tombol Siap]
+    G_FIN --> END

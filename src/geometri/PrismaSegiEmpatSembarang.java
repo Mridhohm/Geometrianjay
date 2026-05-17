@@ -1,60 +1,61 @@
 package geometri;
 
-import java.util.Objects;
+public class PrismaSegiEmpatSembarang
+        extends SegiEmpatSembarang
+        implements Geometri {
 
-/**
- * Prisma tegak dengan alas segi empat sembarang (komposisi: {@link SegiEmpatSembarang}).
- */
-public class PrismaSegiEmpatSembarang implements Geometri {
-
-    private final SegiEmpatSembarang alas;
     private final double tinggiPrisma;
 
-    public PrismaSegiEmpatSembarang(SegiEmpatSembarang alas, double tinggiPrisma) {
-        this.alas = Objects.requireNonNull(alas, "alas");
+    // Constructor utama
+    public PrismaSegiEmpatSembarang(
+            double a, double b, double c, double d,
+            double sudutA, double sudutB,
+            double sudutC, double sudutD,
+            double tinggiPrisma) {
+
+        // Memanggil constructor parent
+        super(a, b, c, d,
+              sudutA, sudutB,
+              sudutC, sudutD);
+
         this.tinggiPrisma = tinggiPrisma;
     }
 
-    /**
-     * Delegasi ke {@link #PrismaSegiEmpatSembarang(SegiEmpatSembarang, double)}.
-     */
-    public PrismaSegiEmpatSembarang(double a, double b, double c, double d,
-            double sudutA, double sudutB, double sudutC, double sudutD,
-            double tinggiPrisma) {
-        this(new SegiEmpatSembarang(a, b, c, d, sudutA, sudutB, sudutC, sudutD), tinggiPrisma);
+    // hitung luas alas
+    public double hitungLuasAlas() {
+        return super.hitungLuas();
     }
 
-    public SegiEmpatSembarang getAlas() {
-        return alas;
-    }
-
-    private double hitungLuasAlas() {
-        return alas.hitungLuas();
-    }
-
+    // hitung keliling alas
     @Override
     public double hitungKeliling() {
-        return alas.hitungKeliling();
+        return super.hitungKeliling();
     }
 
+    // hitung luas alas prisma
     @Override
     public double hitungLuas() {
         return hitungLuasAlas();
     }
 
+    // hitung volume prisma
     @Override
     public double hitungVolume() {
-        return hitungLuasAlas() * tinggiPrisma;
+        return super.hitungLuas() * tinggiPrisma;
     }
 
+    // hitung luas permukaan prisma
     @Override
     public double hitungLuasPermukaan() {
-        return 2.0 * hitungLuasAlas() + hitungKeliling() * tinggiPrisma;
+        return 2.0 * super.hitungLuas()
+                + super.hitungKeliling() * tinggiPrisma;
     }
 
+    // tmpilkan informasi prisma
     @Override
     public String getInfo() {
-        return String.format("Prisma alas segi empat sembarang | %s | tinggi prisma=%.2f",
-                alas.getInfo(), tinggiPrisma);
+        return String.format(
+                "Prisma Segi Empat Sembarang | tinggi prisma = %.2f",
+                tinggiPrisma);
     }
 }

@@ -1,0 +1,12 @@
+%% Diagram 03 — GeoProcessor.run satu worker thread
+flowchart TD
+    START([Thread.start memanggil run]) --> P1[displayProcessingStatus via logLine synchronized]
+    P1 --> IO1[/Output: MEMPROSES, Thread ID, getInfo/]
+    IO1 --> P2[Thread.sleep delayMs]
+    P2 --> D1{InterruptedException?}
+    D1 -->|Ya| P3[/Output ERROR + interrupt flag/]
+    P3 --> END([run selesai])
+    D1 -->|Tidak| P5[hitung luas keliling volume luasPermukaan]
+    P5 --> P9[displayResult via logLine synchronized]
+    P9 --> IO2[/Output: empat angka hasil/]
+    IO2 --> END

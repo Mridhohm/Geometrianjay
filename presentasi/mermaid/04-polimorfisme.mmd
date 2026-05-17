@@ -1,0 +1,12 @@
+%% Diagram 04 — Polimorfisme saat shape.hitung...
+flowchart TD
+    START([Pemanggilan di GeoProcessor.run]) --> P1[Variabel Geometri shape]
+    P1 --> P2[shape.hitungLuas / Keliling / Volume / LuasPermukaan]
+    P2 --> D1{Runtime: tipe objek di heap?}
+    D1 -->|SegiEmpatSembarang| R1[Override: diagonal + Heron, volume 0]
+    D1 -->|LimasSegiEmpatSembarang extends SegiEmpat| R2[Override: super.hitungLuas, volume 1/3 x luas x t, LP limas]
+    D1 -->|PrismaSegiEmpatSembarang extends SegiEmpat| R3[Override: super.hitungLuas, volume luas x tinggi, LP prisma]
+    R1 --> OUT[/Return double ke GeoProcessor/]
+    R2 --> OUT
+    R3 --> OUT
+    OUT --> END([Lanjut displayResult])

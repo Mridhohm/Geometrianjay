@@ -1,0 +1,21 @@
+%% Diagram 05 — GeometriFrame: EDT, koordinator, invokeLater
+flowchart TD
+    START([Program GUI main]) --> P0[invokeLater tampilkan frame]
+    P0 --> WAIT([Tunggu user])
+    WAIT --> IN[/Input spinner min max bentuk dan delay/]
+    IN --> D1{Validasi min le max dan delay?}
+    D1 -->|Tidak| IO1[/Output JOptionPane/]
+    IO1 --> WAIT
+    D1 -->|Ya| P1[clearAllOutput matikan Jalankan progress Berjalan]
+    P1 --> P2[start thread koordinator runBatch]
+    P2 --> C1[/Output log judul batch/]
+    C1 --> C2[[ShapeGenerator.generateRandomShapes]]
+    C2 --> C3[Loop GeoProcessor + new Thread tiap bentuk]
+    C3 --> C4[start semua worker]
+    C4 --> C5[join semua worker di koordinator]
+    C5 --> P3[invokeLater fillSummaryTable]
+    P3 --> IO2[/Output JTable dan pesan selesai/]
+    IO2 --> P4[finally invokeLater pulihkan UI]
+    P4 --> END([Batch selesai])
+    NOTE[Worker: logLine lewat Consumer lalu invokeLater ke JTextArea]
+    C4 -.-> NOTE

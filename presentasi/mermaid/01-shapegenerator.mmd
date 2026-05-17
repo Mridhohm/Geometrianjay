@@ -1,0 +1,22 @@
+%% Diagram 01 — ShapeGenerator.generateRandomShapes
+flowchart TD
+    START([Mulai generateRandomShapes]) --> IN[/Input minCount maxCountInclusive/]
+    IN --> D1{minCount >= 1?}
+    D1 -->|Tidak| ERR[[IllegalArgumentException]]
+    D1 -->|Ya| D2{max >= min?}
+    D2 -->|Tidak| ERR
+    D2 -->|Ya| P1[N = minCount + random inklusif]
+    P1 --> P2[Buat ArrayList kosong]
+    P2 --> P3[i = 0]
+    P3 --> D3{i kurang dari N?}
+    D3 -->|Tidak| OUT[/return List Geometri/]
+    OUT --> END([Selesai])
+    D3 -->|Ya| D4{kind acak 0 1 2?}
+    D4 -->|0| SP[[randomSegiEmpatSembarang]]
+    D4 -->|1| LP[[randomLimasSegiEmpatSembarang]]
+    D4 -->|2| PP[[randomPrismaSegiEmpatSembarang]]
+    SP --> P4[shapes.add]
+    LP --> P4
+    PP --> P4
+    P4 --> P5[i increment]
+    P5 --> D3

@@ -1,0 +1,24 @@
+PRESENTASI (format mudah diakses)
+==============================
+
+1. Buka file:  presentasi\index.html
+   Flowchart §8: diagram 01 s.d. 05 berurutan, lalu diagram 06 (master) di akhir.
+
+2. Diagram Mermaid (.mmd) — folder presentasi\mermaid\
+   01-shapegenerator.mmd
+   02-sinkronisasi-log.mmd
+   03-geoprocessor.mmd
+   04-polimorfisme.mmd
+   05-gui-edt.mmd
+   06-alur-master-keseluruhan.mmd  (tampilkan terakhir)
+
+3. Versi Markdown lengkap: PRESENTASI_LENGKAP.md (root project Java)
+
+4. Penjelasan lengkap arti output konsol & GUI:
+   presentasi\PENJELASAN_OUTPUT_LENGKAP.md
+
+5. Cara baca flowchart + alur diagram 01-06 (simbol standar):
+   presentasi\PENJELASAN_FLOWCHART_LENGKAP.md
+
+Catatan: index.html memuat Mermaid dari internet (CDN). Tanpa internet,
+teks dan tabel tetap terbaca; diagram bisa dibuat dari file .mmd di draw.io.

@@ -36,9 +36,7 @@ import javax.swing.WindowConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
-/**
- * GUI: parameter simulasi, log thread (teks rata kiri), ringkasan di tabel.
- */
+
 public class GeometriFrame extends JFrame {
 
     private static final ThreadLocalRandom RND = ThreadLocalRandom.current();
@@ -197,10 +195,6 @@ public class GeometriFrame extends JFrame {
         summaryModel.setRowCount(0);
     }
 
-    /**
-     * Satu baris dari worker: spasi depan dibuang supaya teks tidak “miring” / bertingkat.
-     * Garis hanya "=" diganti pemisah tetap lebar.
-     */
     private void appendLogLine(String line) {
         if (line == null) {
             return;
@@ -265,7 +259,8 @@ public class GeometriFrame extends JFrame {
     }
 
     private static String volumeCell(Geometri g) {
-        if (g instanceof SegiEmpatSembarang) {
+        // Hanya bentuk 2D murni — limas/prisma juga extends SegiEmpatSembarang
+        if (g.getClass() == SegiEmpatSembarang.class) {
             return "—";
         }
         return fmt(g.hitungVolume());

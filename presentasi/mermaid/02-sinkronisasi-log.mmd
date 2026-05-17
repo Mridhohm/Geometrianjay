@@ -1,0 +1,12 @@
+%% Diagram 02 — Sinkronisasi logLine di GeoProcessor
+%% Simbol: ([ ]) Terminator | [ ] Proses | { } Keputusan
+flowchart TD
+    START([Worker memanggil logLine]) --> P1[Masuk blok synchronized LOCK static]
+    P1 --> D1{logSink null?}
+    D1 -->|Ya konsol| IO1[/Output: System.out.println baris/]
+    D1 -->|Tidak GUI| IO2[/Output: logSink.accept baris ke Consumer/]
+    IO1 --> P2[Keluar blok synchronized]
+    IO2 --> P2
+    P2 --> END([Selesai logLine — thread lain boleh masuk])
+    NOTE["Catatan: tanpa synchronized, baris dari banyak thread bisa tercampur huruf"]
+    P1 -.-> NOTE

@@ -1,13 +1,5 @@
 package geometri;
 
-/**
- * Segi empat sembarang di bidang: empat sisi {@code a–b–c–d} berurutan dan empat sudut dalam
- * {@code sudutA…sudutD} (derajat) di setiap vertex.
- * <p>
- * <b>Kalau ditanya “segi empat sembarangnya di mana?”</b> — class ini <em>adalah</em> bentuknya:
- * field sisi + sudut, plus {@link #hitungLuas()} / {@link #hitungKeliling()}.
- * Luas memakai diagonal (cosine rule dari sudut antara {@code a} dan {@code b}) + Heron dua segitiga.
- */
 public class SegiEmpatSembarang implements Geometri {
 
     private final double a;
@@ -31,7 +23,6 @@ public class SegiEmpatSembarang implements Geometri {
         this.sudutD = sudutD;
     }
 
-    /** Panjang sisi berurutan (untuk komposisi limas/prisma, misalnya luas sisi miring). */
     public double getSisiA() {
         return a;
     }
